@@ -4,7 +4,7 @@
 import ConfigParser
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
-from snipsowm.snipsowm import SnipsOwm
+from snipsowm.snipsowm import SnipsOWM
 import io
 import math
 import datetime as dt
