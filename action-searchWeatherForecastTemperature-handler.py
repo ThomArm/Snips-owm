@@ -53,8 +53,8 @@ def action_wrapper(hermes, intentMessage, conf):
 
     # Determine granularity
    	granularity = None
-   	if datetime:  # We have an information about the date.
-   		now = dt.datetime.now().replace(tzinfo=None)
+    if datetime:  # We have an information about the date.
+        now = dt.datetime.now().replace(tzinfo=None)
         delta_days = abs((datetime - now).days)
         if delta_days > 10: # There a week difference between today and the date we want the forecast.
         	granularity = 2 # Give the day of the forecast date, plus the number of the day in the month.
@@ -62,8 +62,8 @@ def action_wrapper(hermes, intentMessage, conf):
           	granularity = 1 # Give the full date
         else:
           	granularity = 0 # Just give the day of the week
-   	else:
-   		granularity = 0
+    else:
+        granularity = 0
 
     locality = None
     try:
