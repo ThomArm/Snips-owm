@@ -1,0 +1,6 @@
+# Bindings for the hermes protocol 
+
+hermes-python>=0.1
+
+
+snipsowm==0.2.1
