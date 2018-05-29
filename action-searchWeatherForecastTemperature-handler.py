@@ -43,12 +43,12 @@ def action_wrapper(hermes, intentMessage, conf):
     """ 
       # Determine datetime
     datetime = None
-    if snips.intent.forecast_start_datetime:
-    	datetime = snips.intent.forecast_start_datetime[0]
+    if intentMessage.slots.forecast_start_datetime:
+    	datetime = intentMessage.slots.forecast_start_datetime[0]
 
-    if isinstance(datetime, snips.types.InstantTime):
+    if isinstance(datetime, types.InstantTime):
     	datetime = (datetime.datetime).replace(tzinfo=None)
-    elif isinstance(datetime, snips.types.TimeInterval):
+    elif isinstance(datetime, types.TimeInterval):
         datetime = (datetime.end).replace(tzinfo=None)
 
     # Determine granularity
@@ -67,23 +67,24 @@ def action_wrapper(hermes, intentMessage, conf):
 
     locality = None
     try:
-    	locality = snips.intent.forecast_locality \
-    		or snips.intent.forecast_country \
-        	or snips.intent.forecast_region \
-          	or snips.intent.forecast_geographical_poi
+    	locality = intentMessage.slots.forecast_locality \
+    		or intentMessage.slots.forecast_country \
+        	or intentMessage.slots.forecast_region \
+          	or intentMessage.slots.forecast_geographical_poi
 
         if locality:
         	locality = locality[0]
     except Exception:
     	pass
 
-   	snips.skill.speak_temperature(snips, locality, datetime, granularity)
+   	snipsowm.speak_temperature(snips, locality, datetime, granularity)
 
     current_session_id = intentMessage.session_id
     hermes.publish_end_session(current_session_id, result_sentence)
 
 
 if __name__ == "__main__":
+    snipsowm= SnipsOWM("5459abd58e64fe7f121792fabe60fe5c","France","fr_FR") 
     with Hermes("localhost:1883") as h:
         h.subscribe_intent("searchWeatherForecastTemperature", subscribe_intent_callback) \
 .start()

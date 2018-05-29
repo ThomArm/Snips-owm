@@ -44,11 +44,11 @@ def action_wrapper(hermes, intentMessage, conf):
     # Determine datetime
     datetime = None
 
-    if snips.intent.forecast_start_datetime:
-        datetime = snips.intent.forecast_start_datetime[0]
-    if isinstance(datetime, snips.types.InstantTime):
+    if intentMessage.slots.forecast_start_datetime:
+        datetime = intentMessage.slots.forecast_start_datetime[0]
+    if isinstance(datetime, types.InstantTime):
         datetime = (datetime.datetime).replace(tzinfo=None)
-    elif isinstance(datetime, snips.types.TimeInterval):
+    elif isinstance(datetime, types.TimeInterval):
         datetime = (datetime.end).replace(tzinfo=None)
 
 
@@ -69,23 +69,24 @@ def action_wrapper(hermes, intentMessage, conf):
     # Determine condition
     condition_name = None
     try:
-        condition_name = snips.intent.forecast_condition_name[0] if snips.intent.forecast_condition_name else None
+        condition_name = intentMessage.slots.forecast_condition_name[0] if intentMessage.slots.forecast_condition_name else None
     except Exception:
         pass
 
-    snips.intent.forecast_locality = snips.intent.forecast_locality[0] if snips.intent.forecast_locality else None
-    snips.intent.forecast_region = snips.intent.forecast_region[0] if snips.intent.forecast_region else None
-    snips.intent.forecast_country = snips.intent.forecast_country[0] if snips.intent.forecast_country else None
-    snips.intent.forecast_geographical_poi = snips.intent.forecast_geographical_poi[0] if snips.intent.forecast_geographical_poi else None
+    intentMessage.slots.forecast_locality = intentMessage.slots.forecast_locality[0] if intentMessage.slots.forecast_locality else None
+    intentMessage.slots.forecast_region = intentMessage.slots.forecast_region[0] if intentMessage.slots.forecast_region else None
+    intentMessage.slots.forecast_country = intentMessage.slots.forecast_country[0] if intentMessage.slots.forecast_country else None
+    intentMessage.slots.forecast_geographical_poi = intentMessage.slots.forecast_geographical_poi[0] if intentMessage.slots.forecast_geographical_poi else None
 
     #print "cond: {}, datetime: {}, Locality: {}, granularity: {}".format(condition_name, datetime, snips.intent.forecast_locality, granularity)
-    snips.skill.speak_condition(snips, condition_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
+    snipsowm.speak_condition(snips, condition_name, datetime, granularity=granularity, Locality=snips.intent.forecast_locality, Region=snips.intent.forecast_region, Country=snips.intent.forecast_country, POI=snips.intent.forecast_geographical_poi)
 
     current_session_id = intentMessage.session_id
     hermes.publish_end_session(current_session_id, result_sentence)
 
 
 if __name__ == "__main__":
+    snipsowm= SnipsOWM("5459abd58e64fe7f121792fabe60fe5c","France","fr_FR") 
     with Hermes("localhost:1883") as h:
         h.subscribe_intent("searchWeatherForecastCondition", subscribe_intent_callback) \
 .start()
