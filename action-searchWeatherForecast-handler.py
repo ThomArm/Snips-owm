@@ -47,9 +47,9 @@ def action_wrapper(hermes, intentMessage, conf):
     if intentMessage.slots.forecast_start_datetime:
         datetime = intentMessage.slots.forecast_start_datetime[0]
 
-    if isinstance(datetime, InstantTime):
+    if isinstance(datetime, snips.types.InstantTime):
         datetime = (datetime.datetime).replace(tzinfo=None)
-    elif isinstance(datetime, TimeInterval):
+    elif isinstance(datetime, snips.types.TimeInterval):
         datetime = (datetime.end).replace(tzinfo=None)
 
     # Determine granularity
